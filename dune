@@ -1,0 +1,9 @@
+(executable
+ (public_name collections)
+ (name collections)
+ (promote (until-clean))
+ (libraries camlp-streams prelude mattlude lib))
+
+(env
+  (dev
+    (flags (:standard -warn-error -A))))
