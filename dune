@@ -2,7 +2,7 @@
  (public_name collections)
  (name collections)
  (promote (until-clean))
- (libraries camlp-streams prelude mattlude lib))
+ (libraries camlp-streams prelude mattlude lib restful))
 
 (env
   (dev

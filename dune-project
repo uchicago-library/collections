@@ -1,13 +1,13 @@
-(lang dune 3.0)
+(lang dune 3.8)
 (generate_opam_files true)
 (package
  (name collections)
- (description "Insert project description here.")
- (synopsis "Insert project synopsis, which is supposedly different, here")
- (maintainers "Your Name <youremail@gmail.com>")
- (authors "Your Name <youremail@gmail.com>")
- (homepage "https://your.website.here")
- (bug_reports "https://your.website.here")
+ (description "UChicago DLDC digital collections Rest API")
+ (synopsis "Rest API for communicating with digital collections database")
+ (maintainers "UChicago Developer <some-developer@uchicago.edu>")
+ (authors "UChicago Developer <some-developer@uchicago.edu>")
+ (homepage "https://github.com/uchicago-library/collections")
+ (bug_reports "https://github.com/uchicago-library/collections")
  (depends
   (ocaml (>= 4.13.0))
    dune
@@ -16,4 +16,5 @@
    mattlude
    utop
    ocp-index
+   restful
    merlin))

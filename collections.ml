@@ -1,1 +1,3 @@
-let () = print_endline Lib.message
+open Restful
+module R = Make (Service) (Error (Log.Default))
+let () = R.main ()
