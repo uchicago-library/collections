@@ -1,3 +1,2 @@
-
-
-let message = "GOODBYE CRUEL WORLD (is underrated)"
+module Fetch = Fetch
+module Json = Json

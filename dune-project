@@ -17,4 +17,7 @@
    utop
    ocp-index
    restful
+   netclient
+   threads
+   nettls-gnutls
    merlin))

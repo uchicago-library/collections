@@ -1,6 +1,13 @@
 (library
  (name lib)
- (libraries prelude mattlude))
+ (libraries prelude
+            mattlude
+            cohttp
+            cohttp-lwt
+            cohttp-lwt-unix
+            tls-lwt
+            json-data-encoding
+            ezjsonm))
 
 (env
   (dev
