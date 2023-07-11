@@ -1,6 +1,6 @@
 open Restful
 
-open Lib.Fetch
+(* open Lib.Fetch *)
 
 module Service = struct
   include Service
