@@ -18,6 +18,7 @@ depends: [
   "netclient"
   "threads"
   "nettls-gnutls"
+  "data-encoding"
   "merlin"
   "odoc" {with-doc}
 ]

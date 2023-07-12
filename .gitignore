@@ -32,3 +32,5 @@ collections.opam
 collections.exe
 
 **/*~
+
+*.opam

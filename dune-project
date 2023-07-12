@@ -20,4 +20,5 @@
    netclient
    threads
    nettls-gnutls
+   data-encoding
    merlin))

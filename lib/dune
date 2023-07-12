@@ -8,7 +8,7 @@
             cohttp-lwt
             cohttp-lwt-unix
             tls-lwt
-            json-data-encoding
+            data-encoding
             ezjsonm))
 
 (env

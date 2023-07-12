@@ -5,4 +5,4 @@ module Api = Api
 
 (* Mark Logic API modules *)
 module GetBrowseListDates = GetBrowseListDates
-
+module GetBrowseListLanugages = GetBrowseListLanguages
