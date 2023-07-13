@@ -7,7 +7,7 @@ end
 module Printing = struct
   let enc_to_schema enc =
     enc
-    |> Json_encoding.schema
+    |> Data_encoding.Json.schema
     |> Json_schema.to_json
 
   let to_string enc =
