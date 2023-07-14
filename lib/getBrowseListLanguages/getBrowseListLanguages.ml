@@ -10,11 +10,20 @@ module Parse = struct
     open Data_encoding
 
     let vars_enc = assoc @@ list string
-    let bindings_enc =
-      assoc @@ list @@ obj2
-                         (req "prefLabel" @@ assoc string)
-                         (req "code" @@ assoc string)
 
+    let bindings_enc =
+      assoc @@ list @@
+        obj2
+          (req "prefLabel" @@
+             obj3
+               (req "xml:lang" string)
+               (req "type" string)
+               (req "value" string))
+          (req "code" @@
+             obj2
+               (req "type" string)
+               (req "value" string))
+      
     let head_enc = req "head" vars_enc
     let results_enc = req "results" bindings_enc
 
@@ -26,6 +35,33 @@ module Parse = struct
 end
 
 module Transform = struct
-  
+  (* TODO: promote Alist.update *)
+  module Alist = struct
+    open List.Assoc
+    let update k v alist =
+      if mem k alist
+      then replace (k, v) alist
+      else add k v alist
+  end
+  include Alist
+
+  let fix_languages alist =
+    let open List.Assoc in 
+    let reducer acc ((lang_lang, _, lang_name),
+                     (_, code)) =
+      add code (lang_lang, lang_name) acc in
+    coalesce (foldl reducer [] alist)
+
+  let transform (_, results) =
+    (* let open Mattlude.Endofunctors.Option in *)
+    let bindings = assoc "bindings" results
+                 (* assoc_opt "bindings" results *)
+    in
+    (* pure ( *)
+        fix_languages bindings
+      (* ) *)
 end
 
+(* module Export = struct
+ *   let 
+ * end *)
