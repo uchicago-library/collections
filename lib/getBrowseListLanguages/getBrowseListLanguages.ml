@@ -7,6 +7,7 @@ end
 
 module Parse = struct
   open Data_encoding
+
   module Encoding = struct
 
     let vars_enc = assoc @@ list string
