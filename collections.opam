@@ -19,6 +19,7 @@ depends: [
   "threads"
   "nettls-gnutls"
   "data-encoding"
+  "uri"
   "merlin"
   "odoc" {with-doc}
 ]

@@ -21,4 +21,5 @@
    threads
    nettls-gnutls
    data-encoding
+   uri
    merlin))

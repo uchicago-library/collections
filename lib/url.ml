@@ -5,7 +5,6 @@ module BaseURL = struct
     let ml_host = "http://marklogic.lib.uchicago.edu"
     let ml_port = 8031
     let ml_path = "main.xqy?query="
-    let ml_group = "dma"
 
     let assemble_url_prefix_full host group api_name port path =
       let parts = [
@@ -14,17 +13,17 @@ module BaseURL = struct
           string_of_int port;
           "/";
           group;
-          ";";
+          "/";
           path;
           api_name;
         ]
       in
       String.join ~sep:"" parts
 
-    let assemble_url_prefix api_name =
+    let assemble_url_prefix ?(group=Defaults.group) api_name =
       assemble_url_prefix_full
         ml_host
-        ml_group
+        group
         api_name
         ml_port
         ml_path
@@ -47,3 +46,18 @@ module BaseURL = struct
     let ark_base = assemble_url_prefix ark_host ark_path
   end
 end
+
+let make_api_string ?(curl=true) ?(group=Defaults.group) api_name params =
+  let open Api.Querystring in
+  let qs_encode dct =
+    dct 
+    |> to_list
+    |> Uri.encoded_of_query
+  in
+  let url_prefix =
+    let open BaseURL.MarkLogic in
+    assemble_url_prefix ~group:group api_name
+  in
+  if curl
+  then url_prefix ^ "&" ^ qs_encode params
+  else url_prefix
