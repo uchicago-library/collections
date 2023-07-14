@@ -1,8 +1,7 @@
 (* App modules *)
 module Fetch = Fetch
-module Json = Json
 module Api = Api
-module Encoding = Encoding
+module Printing = Printing
 
 (* Mark Logic API modules *)
 module GetBrowseListDates = GetBrowseListDates

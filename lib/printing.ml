@@ -1,0 +1,37 @@
+module Json = struct
+  let to_string json =
+    let () = Data_encoding.Json.pp
+               Format.str_formatter
+               json
+    in Format.flush_str_formatter ()
+
+  let print_entire json =
+    Format.printf
+      "%a"
+      (Json_repr.pp (module Json_repr.Ezjsonm))
+      json
+
+  let print ?truncate json =
+    match truncate with
+    | Some n -> Prelude.print
+                @@ Prelude.String.take n
+                @@ to_string json
+    | None -> print_entire json
+end
+
+module Encoding = struct
+  let enc_to_schema enc =
+    enc
+    |> Data_encoding.Json.schema
+    |> Json_schema.to_json
+
+  let to_string enc =
+    enc
+    |> enc_to_schema
+    |> Data_encoding.Json.to_string
+
+  let print ?truncate enc =
+    enc
+    |> enc_to_schema
+    |> Json.print ?truncate
+end

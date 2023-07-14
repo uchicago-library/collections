@@ -23,7 +23,15 @@ module Parse = struct
     let results_enc = req "results" bindings_enc
 
     let enc = obj2 head_enc results_enc
+    let schema = Printing.Encoding.to_string enc
 
-    let example = Example.getBrowseListLanguages
+    let example = Json.destruct
+                    enc
+                    Example.getBrowseListLanguages
   end
 end
+
+module Transform = struct
+  
+end
+
