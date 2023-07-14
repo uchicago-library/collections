@@ -6,8 +6,8 @@ module Example = struct
 end
 
 module Parse = struct
+  open Data_encoding
   module Encoding = struct
-    open Data_encoding
 
     let vars_enc = assoc @@ list string
 
@@ -26,12 +26,13 @@ module Parse = struct
       
     let head_enc = req "head" vars_enc
     let results_enc = req "results" bindings_enc
-
     let enc = obj2 head_enc results_enc
-    let schema = Printing.Encoding.to_string enc
-
-    let example = Json.destruct enc Example.value
   end
+
+  let parse json = Json.destruct Encoding.enc json
+  let schema = Printing.Encoding.to_string Encoding.enc
+  let example = Json.destruct Encoding.enc Example.value
+
 end
 
 module Transform = struct
@@ -53,15 +54,28 @@ module Transform = struct
     coalesce (foldl reducer [] alist)
 
   let transform (_, results) =
-    (* let open Mattlude.Endofunctors.Option in *)
-    let bindings = assoc "bindings" results
-                 (* assoc_opt "bindings" results *)
-    in
-    (* pure ( *)
-        fix_languages bindings
-      (* ) *)
+    let open Mattlude.Endofunctors.Option in
+    let* bindings = assoc_opt "bindings" results
+    in pure (fix_languages bindings)
 end
 
-(* module Export = struct
- *   let 
- * end *)
+module Export = struct
+  open Data_encoding
+
+  module Encoding = struct
+    let enc = assoc (assoc string)
+  end
+
+  (* TODO: make this informative *)
+  let error_msg = "there was an error"
+
+  let un_option = function
+    | Some json -> `O [("ok", json)]
+    | None -> `O [("error", `String error_msg)]
+
+  let export json_opt =
+    let open Mattlude.Endofunctors.Option in
+    json_opt 
+    >>| Json.construct Encoding.enc
+    |> un_option
+end
