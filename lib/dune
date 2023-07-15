@@ -4,6 +4,7 @@
  (name lib)
  (libraries prelude
             mattlude
+            restful
             cohttp
             cohttp-lwt
             cohttp-lwt-unix
