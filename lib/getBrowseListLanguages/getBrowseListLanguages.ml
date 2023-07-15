@@ -2,14 +2,11 @@ open Prelude
 module D = Defaults
 
 module Params = struct
-  include Url.Querystring
+  open Url.Querystring
 
-  let make_verbose collection =
-    let qs = [ ("collection", [collection]) ]
-    in Dict.of_list Dict.empty qs
-  
   let make ?(collection=D.collection) () =
-    make_verbose collection
+    let qs = [ ("collection", [collection]) ]
+    in of_list qs
 end
 
 module Url = struct
