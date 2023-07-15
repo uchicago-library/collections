@@ -1,5 +1,5 @@
 module Params = struct
-  include Api.Querystring
+  include Url.Querystring
 
   let make_verbose collection =
     let qs = [ ("collection", collection) ]

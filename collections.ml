@@ -4,7 +4,7 @@ open Restful
 
 module Service = struct
   include Service
-  open Valid
+  (* open Valid *)
   open Param
   module D = Lib.Defaults
 

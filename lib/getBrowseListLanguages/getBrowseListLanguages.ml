@@ -2,7 +2,7 @@ open Prelude
 module D = Defaults
 
 module Params = struct
-  include Api.Querystring
+  include Url.Querystring
 
   let make_verbose collection =
     let qs = [ ("collection", [collection]) ]
@@ -33,7 +33,7 @@ module Fetch = struct
         () 
     = let url =
         Url.url ~curl:curl ~group:group ~collection:collection ()
-      in Api.Fetch.fetch url
+      in Fetch.fetch url
 end
 
 module Parse = struct
@@ -66,15 +66,6 @@ module Parse = struct
 end
 
 module Transform = struct
-  (* TODO: promote Alist.update *)
-  module Alist = struct
-    open List.Assoc
-    let update k v alist =
-      if mem k alist
-      then replace (k, v) alist
-      else add k v alist
-  end
-  include Alist
 
   let fix_languages alist =
     let open List.Assoc in 
