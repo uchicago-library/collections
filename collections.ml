@@ -2,8 +2,6 @@ open Restful
 
 module Service = struct
   include Service
-  open Param
-  module D = Lib.Defaults
 
   let endpoints = [
       Lib.GetBrowseListLanguages.(endpoint_name, subservice);
