@@ -89,19 +89,31 @@ end
 
 module Gimme = struct
   let gimme
+        ?(curl=false)
         ?(group=D.group)
         ?(collection=D.collection)
+        ?(identifier=D.identifier)
+        ?(search=D.search)
         () =
-    Fetch.fetch
-      ~group:group
-      ~collection:collection
-      ()
-    |> Ezjsonm.from_string
-    |> Parse.parse
-    |> Transform.transform
-    |> Export.export
-    |> Printing.Json.to_string
+    let _ = identifier in
+    let _ = search in
+    if curl then Url.url
+                  ~group
+                  ~collection
+                  ~identifier
+                  ~search
+                  ()
+    else Fetch.fetch
+           ~group:group
+           ~collection:collection
+           ()
+         |> Ezjsonm.from_string
+         |> Parse.parse
+         |> Transform.transform
+         |> Export.export
+         |> Printing.Json.to_string
 end
+include Gimme
 
 module Spec = struct
   open Restful.Valid
@@ -114,7 +126,7 @@ end
 
 let subservice cgi argv0 argv =
   Api.Subservice.mk_subservice
-    Gimme.gimme
+    gimme
     Spec.spec
     cgi
     argv0
