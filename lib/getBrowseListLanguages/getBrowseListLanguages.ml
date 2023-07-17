@@ -107,12 +107,16 @@ module Gimme = struct
                   ~search
                   ()
     | Raw -> Fetch.fetch
-                  ~group:group
-                  ~collection:collection
+                  ~group
+                  ~collection
+                  ~identifier
+                  ~search
                   ()
     | Normal -> Fetch.fetch
-                  ~group:group
-                  ~collection:collection
+                  ~group
+                  ~collection
+                  ~identifier
+                  ~search
                   ()
                 |> Ezjsonm.from_string
                 |> Parse.parse
