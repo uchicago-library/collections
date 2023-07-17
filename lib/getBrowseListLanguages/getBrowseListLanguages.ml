@@ -4,6 +4,8 @@ module D = Defaults
 module Params = struct
   open Url.Querystring
 
+  let endpoint_name = "getBrowseListLanguages"
+
   let make ?(collection=D.collection) () =
     let qs = [ ("collection", [collection]) ]
     in of_list qs
@@ -18,7 +20,7 @@ module Url = struct
     Url.make_api_string
       ~curl:curl
       ~group:group
-      "getBrowseListLanguages"
+      Params.endpoint_name
       (Params.make ~collection:collection ())
 end
 
@@ -118,7 +120,7 @@ module Spec = struct
   open Restful.Valid
   open Restful.Param
   let spec = [
-      "endpoint", Mandatory, notblank;
+      (* "endpoint", Mandatory, notblank; *)
       "group", Mandatory, notblank;
       "collection", Mandatory, notblank;
     ]
