@@ -6,12 +6,14 @@ module D = struct
 end
 
 module Params = struct
-  open Url.Querystring
+  include Url.Querystring
 
   let make ?(identifier=D.identifier)
         ?(collection=D.collection) () =
     let qs = [ ("collection", [collection]);
                ("identifier", [identifier]); ]
-    in of_list qs
+    in Dict.of_list Dict.empty qs
+
+  let to_list = Dict.to_list 
 end
 
