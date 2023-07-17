@@ -22,7 +22,7 @@ end
 let endpoint_name = Params.endpoint_name
 
 include Api.Fetcher (Params) (D)
-nn
+
 module Parse = struct
   open Data_encoding
 
