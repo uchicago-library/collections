@@ -4,12 +4,6 @@ let fetch url =
   Cohttp_lwt_unix.Client.get (Uri.of_string url) >>= stringify
   |> Lwt_main.run
 
-type gimme =
-  ?group:string ->
-  ?collection:string ->
-  unit ->
-  string
-
 module type PARAMS = sig
   include Url.QUERYSTRING
   val endpoint_name : string
@@ -67,11 +61,19 @@ module Fetcher (P : PARAMS) (D : DEFAULTS) = struct
   end
 end
 
-let mk_subservice (gimme : gimme) spec cgi _ _ =
-  let open Restful in
-  let open Param in
-  let ps = process cgi spec in
-  let group = (value ps "group") in
-  let collection = (value ps "collection") in
-  Content.write ~content_type:"text/plain" cgi
-    (Printf.sprintf "%s" (gimme ~group ~collection ()))
+module Subservice = struct
+  type gimme =
+    ?group:string ->
+    ?collection:string ->
+    unit ->
+    string
+
+  let mk_subservice (gimme : gimme) spec cgi _ _ =
+    let open Restful in
+    let open Param in
+    let ps = process cgi spec in
+    let group = (value ps "group") in
+    let collection = (value ps "collection") in
+    Content.write ~content_type:"text/plain" cgi
+      (Printf.sprintf "%s" (gimme ~group ~collection ()))
+end
