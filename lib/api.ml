@@ -1,11 +1,3 @@
-let fetch url =
-  let open Lwt.Infix in
-  let stringify (_, body) =
-    Cohttp_lwt.Body.to_string body
-  in
-  Cohttp_lwt_unix.Client.get (Uri.of_string url) >>= stringify
-  |> Lwt_main.run
-
 module type PARAMS = sig
   include Url.QUERYSTRING
   val endpoint_name : string
@@ -61,6 +53,14 @@ module Fetcher (P : PARAMS) (D : DEFAULTS) = struct
   end
 
   module Fetch = struct
+    let fetch_body url =
+      let open Lwt.Infix in
+      let stringify (_, body) =
+        Cohttp_lwt.Body.to_string body
+      in
+      Cohttp_lwt_unix.Client.get (Uri.of_string url) >>= stringify
+      |> Lwt_main.run
+
     let fetch
           ?(group=D.group)
           ?(collection=D.collection)
@@ -69,7 +69,7 @@ module Fetcher (P : PARAMS) (D : DEFAULTS) = struct
           () 
       = let url =
           Url.url ~group ~collection ~identifier ~search ()
-        in fetch url
+        in fetch_body url
   end
 end
 
@@ -79,4 +79,3 @@ module Debug = struct
     | Raw
     | Normal
 end
-
