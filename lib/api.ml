@@ -1,6 +1,8 @@
 let fetch url =
   let open Lwt.Infix in
-  let stringify (_, body) = Cohttp_lwt.Body.to_string body in
+  let stringify (_, body) =
+    Cohttp_lwt.Body.to_string body
+  in
   Cohttp_lwt_unix.Client.get (Uri.of_string url) >>= stringify
   |> Lwt_main.run
 
@@ -71,28 +73,10 @@ module Fetcher (P : PARAMS) (D : DEFAULTS) = struct
   end
 end
 
-module Subservice = struct
-  type gimme =
-    ?curl:bool ->
-    ?group:string ->
-    ?collection:string ->
-    ?identifier:string ->
-    ?search:string ->
-    unit ->
-    string
-
-  let mk_subservice (gimme : gimme) spec cgi _ _ =
-    let open Restful in
-    let open Param in
-    let ps = process cgi spec in
-    let group = (value ps "group") in
-    let collection = (value ps "collection") in
-    let identifier = (value ps "identifier") in
-    let search = (value ps "search") in    
-    Content.write ~content_type:"text/plain" cgi
-      (Printf.sprintf "%s" (gimme
-                              ~group
-                              ~collection
-                              ~identifier
-                              ~search ()))
+module Debug = struct
+  type t =
+    | Curl
+    | Raw
+    | Normal
 end
+

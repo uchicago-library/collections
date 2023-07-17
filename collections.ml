@@ -8,7 +8,7 @@ module Service = struct
     ]
 
   let main _ _ cgi =
-    Pathinfo.dispatch "endpoint" endpoints cgi
+    Pathinfo.dispatch "" endpoints cgi
 end
 
 module R = Make (Service) (Error (Log.Default))
