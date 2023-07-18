@@ -1,3 +1,5 @@
+open Prelude
+
 module type PARAMS = sig
   include Url.QUERYSTRING
   val endpoint_name : string
@@ -61,6 +63,11 @@ module Fetcher (P : PARAMS) (D : DEFAULTS) = struct
       Cohttp_lwt_unix.Client.get (Uri.of_string url) >>= stringify
       |> Lwt_main.run
 
+    let fetch_ocamlnet uri =
+      match Uri.to_string uri |> Nethttp_client.Convenience.http_get_message with
+      (* | exception Nethttp_client.Http_error (code, str) -> Error (`Http (code, (), str)) *)
+      | call -> call # response_body # value
+
     let fetch
           ?(group=D.group)
           ?(collection=D.collection)
@@ -69,8 +76,16 @@ module Fetcher (P : PARAMS) (D : DEFAULTS) = struct
           () 
       = let url =
           Url.url ~group ~collection ~identifier ~search ()
-        in fetch_body url
+        in fetch_ocamlnet (Uri.of_string url)
   end
+end
+
+module Spec = struct
+  let mk_spec fields =
+    let open Restful.Valid in
+    let open Restful.Param in
+    let each_field name = name, Mandatory, notblank
+    in map each_field fields
 end
 
 module Debug = struct

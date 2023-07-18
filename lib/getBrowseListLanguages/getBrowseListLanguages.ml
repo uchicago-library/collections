@@ -99,6 +99,10 @@ module Export = struct
     json_result
     >>| Json.construct Encoding.enc
     |> un_result
+
+  module Example = struct
+    
+  end
 end
 
 module Gimme = struct
@@ -130,12 +134,8 @@ end
 include Gimme
 
 module Spec = struct
-  open Restful.Valid
-  open Restful.Param
-  let spec = [
-      "group", Mandatory, notblank;
-      "collection", Mandatory, notblank;
-    ]
+  let qs_fields = [ "group"; "collection" ]
+  let spec = Api.Spec.mk_spec qs_fields
 end
 
 module Subservice = struct
@@ -149,3 +149,53 @@ module Subservice = struct
                   (gimme ~group ~collection ())
 end
 include Subservice
+
+let thing =
+  `O
+  [("head", `O [("vars", `A [`String "prefLabel"; `String "code"])]);
+   ("results",
+    `O
+      [("bindings",
+        `A
+          [`O
+             [("prefLabel",
+               `O
+                 [("xml:lang", `String "en"); ("type", `String "literal");
+                  ("value", `String "Aguacateco")]);
+              ("code",
+               `O [("type", `String "literal"); ("value", `String "agu")])];
+           `O
+             [("prefLabel",
+               `O
+                 [("xml:lang", `String "en"); ("type", `String "literal");
+                  ("value", `String "Akateko")]);
+              ("code",
+               `O [("type", `String "literal"); ("value", `String "knj")])];
+           `O
+             [("prefLabel",
+               `O
+                 [("xml:lang", `String "en"); ("type", `String "literal");
+                  ("value", `String "Buglere")]);
+              ("code",
+               `O [("type", `String "literal"); ("value", `String "sab")])];
+           `O
+             [("prefLabel",
+               `O
+                 [("xml:lang", `String "en"); ("type", `String "literal");
+                  ("value", `String "Central Guerrero Nahuatl")]);
+              ("code",
+               `O [("type", `String "literal"); ("value", `String "ngu")])];
+           `O
+             [("prefLabel",
+               `O
+                 [("xml:lang", `String "en"); ("type", `String "literal");
+                  ("value", `String "Central Huasteca Nahuatl")]);
+              ("code",
+               `O [("type", `String "literal"); ("value", `String "nch")])];
+           `O
+             [("prefLabel",
+               `O
+                 [("xml:lang", `String "en"); ("type", `String "literal");
+                  ("value", `String "Chol")]);
+              ("code",
+               `O [("type", `String "literal"); ("value", `String "ctu")])]])])]

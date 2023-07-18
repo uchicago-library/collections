@@ -10,7 +10,9 @@
             cohttp-lwt-unix
             tls-lwt
             data-encoding
-            ezjsonm))
+            ezjsonm
+            nettls-gnutls
+            netclient))
 
 (env
   (dev

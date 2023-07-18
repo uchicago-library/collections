@@ -2,7 +2,14 @@
  (public_name collections)
  (name collections)
  (promote (until-clean))
- (libraries camlp-streams prelude mattlude lib restful nettls-gnutls netclient threads))
+ (libraries camlp-streams
+            prelude
+            mattlude
+            lib
+            restful
+            nettls-gnutls
+            netclient
+            threads))
 
 (env
   (dev
