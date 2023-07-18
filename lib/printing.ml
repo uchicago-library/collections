@@ -35,3 +35,11 @@ module Encoding = struct
     |> enc_to_schema
     |> Json.print ?truncate
 end
+
+module Error = struct
+  let to_string exn =
+    let () = Data_encoding.Json.print_error
+               Format.str_formatter
+               exn
+    in Format.flush_str_formatter ()
+end

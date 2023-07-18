@@ -77,5 +77,5 @@ module Debug = struct
   type t =
     | Curl
     | Raw
-    | Normal
+    | DebugOff
 end
