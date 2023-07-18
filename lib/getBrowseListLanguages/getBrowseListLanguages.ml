@@ -51,7 +51,13 @@ module Parse = struct
 
   let ezjsonm json =
     match Ezjsonm.from_string json with
-    | exception Ezjsonm.Parse_error (`Null,_) ->
+    | exception Ezjsonm.Parse_error (`Null,_)
+                |  `O [("head",
+                        `O [("vars",
+                             `A [])]);
+                       ("results",
+                        `O [("bindings",
+                             `A [])])] ->
        Error "empty result"
     | exception e ->
        Error (Printing.Error.to_string e)
