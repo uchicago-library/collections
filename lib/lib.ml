@@ -1,10 +1,10 @@
 (* App modules *)
-module Api = Api
+module Utils = Utils
 module Printing = Printing
 module Defaults = Defaults
 module Url = Url
+module Endpoint = Endpoint
 
 (* Mark Logic API modules *)
-(* module GetBrowseListDates = GetBrowseListDates *)
 module GetBrowseListLanguages = GetBrowseListLanguages
 module GetItem = GetItem

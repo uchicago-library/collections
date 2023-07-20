@@ -9,7 +9,23 @@
             restful
             nettls-gnutls
             netclient
-            threads))
+            threads)
+ (modules collections))
+
+(executable
+ (public_name generate-schemas)
+ (name generate_schemas)
+ (promote (until-clean))
+ (libraries camlp-streams
+            prelude
+            mattlude
+            lib)
+ (modules generate_schemas))
+
+; (rule
+;   (targets generate-schemas)
+;   (deps (universe))
+;   (action (run generate-schemas)))
 
 (env
   (dev

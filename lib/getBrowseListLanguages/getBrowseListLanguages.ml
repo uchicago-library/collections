@@ -22,7 +22,7 @@ end
 
 let endpoint_name = Params.endpoint_name
 
-include Api.Fetcher (Params) (D)
+include Utils.Fetcher (Params) (D)
 
 module Parse = struct
   open Data_encoding
@@ -67,7 +67,7 @@ module Parse = struct
                 Printing.Error.to_string
                 (Json.destruct Encoding.enc)
 
-  let schema = Api.schema Encoding.enc
+  let schema = Utils.Schema.schema Encoding.enc
 end
 
 module Transform = struct
@@ -109,11 +109,11 @@ module Export = struct
   module Example = struct
     
   end
-  let schema = Api.schema Encoding.enc
+  let schema = Utils.Schema.schema Encoding.enc
 end
 
 module Gimme = struct
-  open Api.Debug
+  open Utils.Debug
 
   let gimme
         ?(debug=DebugOff)
@@ -142,7 +142,7 @@ include Gimme
 
 module Spec = struct
   let qs_fields = [ "group"; "collection" ]
-  let spec = Api.Spec.mk_spec qs_fields
+  let spec = Utils.Spec.mk_spec qs_fields
 end
 
 module Subservice = struct
@@ -158,7 +158,31 @@ end
 include Subservice
 
 module Schema = struct
+  open Utils.Schema
   let input_schema = Parse.schema
   let output_schema = Export.schema
+
+  let input_path =
+    sprintf
+      "%s/%s/%s.json"
+      (* cwd *)
+      schemas_root
+      "input"
+      endpoint_name
+
+  let output_path =
+    sprintf
+      "%s/%s/%s.json"
+      (* cwd *)
+      schemas_root
+      "output"
+      endpoint_name
+
+  let input_write () =
+    (* let cwd = Prelude.Unix.getcwd () in *)
+    writefile ~fn:input_path input_schema
+
+  let output_write () =
+    (* let cwd = Prelude.Unix.getcwd () in *)
+    writefile ~fn:output_path output_schema
 end
-include Schema
