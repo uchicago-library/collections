@@ -23,9 +23,9 @@
  (modules generate_schemas))
 
 ; (rule
-;   (targets generate-schemas)
-;   (deps (universe))
-;   (action (run generate-schemas)))
+;  (targets generate-schemas)
+;  (deps (source_tree "schema/input") (source_tree "schema/output"))
+;  (action (run generate-schemas)))
 
 (env
   (dev
