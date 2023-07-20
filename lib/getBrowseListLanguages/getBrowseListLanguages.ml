@@ -67,7 +67,7 @@ module Parse = struct
                 Printing.Error.to_string
                 (Json.destruct Encoding.enc)
 
-  let schema = Printing.Encoding.to_string Encoding.enc
+  let schema = Api.schema Encoding.enc
 end
 
 module Transform = struct
@@ -109,6 +109,7 @@ module Export = struct
   module Example = struct
     
   end
+  let schema = Api.schema Encoding.enc
 end
 
 module Gimme = struct
@@ -155,3 +156,9 @@ module Subservice = struct
                   (gimme ~group ~collection ())
 end
 include Subservice
+
+module Schema = struct
+  let input_schema = Parse.schema
+  let output_schema = Export.schema
+end
+include Schema

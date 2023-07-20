@@ -80,6 +80,8 @@ module Fetcher (P : PARAMS) (D : DEFAULTS) = struct
   end
 end
 
+let schema enc = Printing.Encoding.to_string enc
+
 module Spec = struct
   let mk_spec fields =
     let open Restful.Valid in
@@ -94,3 +96,4 @@ module Debug = struct
     | Raw
     | DebugOff
 end
+
