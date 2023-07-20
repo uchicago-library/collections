@@ -1,0 +1,48 @@
+{ "$schema": "http://json-schema.org/draft-04/schema#", "type": "object",
+  "properties":
+    { "head":
+        { "type": "object",
+          "additionalProperties":
+            { "type": "array",
+              "items": { "$ref": "#/definitions/unistring" } } },
+      "results":
+        { "type": "object",
+          "additionalProperties":
+            { "type": "array",
+              "items":
+                { "type": "object",
+                  "properties":
+                    { "prefLabel":
+                        { "type": "object",
+                          "properties":
+                            { "xml:lang":
+                                { "$ref": "#/definitions/unistring" },
+                              "type": { "$ref": "#/definitions/unistring" },
+                              "value": { "$ref": "#/definitions/unistring" } },
+                          "required": [ "value", "type", "xml:lang" ],
+                          "additionalProperties": false },
+                      "code":
+                        { "type": "object",
+                          "properties":
+                            { "type": { "$ref": "#/definitions/unistring" },
+                              "value": { "$ref": "#/definitions/unistring" } },
+                          "required": [ "value", "type" ],
+                          "additionalProperties": false } },
+                  "required": [ "code", "prefLabel" ],
+                  "additionalProperties": false } } } },
+  "required": [ "results", "head" ], "additionalProperties": false,
+  "definitions":
+    { "unistring":
+        { "title": "Universal string representation",
+          "description":
+            "Either a plain UTF8 string, or a sequence of bytes for strings that contain invalid byte sequences.",
+          "oneOf":
+            [ { "type": "string" },
+              { "type": "object",
+                "properties":
+                  { "invalid_utf8_string":
+                      { "type": "array",
+                        "items":
+                          { "type": "integer", "minimum": 0, "maximum": 255 } } },
+                "required": [ "invalid_utf8_string" ],
+                "additionalProperties": false } ] } } }
