@@ -1,17 +1,12 @@
 open Prelude
 
-module type QUERYSTRING = sig
-  module Field : Prelude.OrderedType
-  module Dict : module type of Map.Make (Field)
-  type value = string
-  type t
-end
+module type QUERYSTRING = Url_intf.QUERYSTRING
 
 module Querystring : QUERYSTRING
        with module Field = String
         and type value = string = struct
   module Field = String
-  module Dict = Map.Make (Field)
+  module Dict = Prelude.Map.Make (Field)
   type value = string
   type t = value list Dict.t
 end
