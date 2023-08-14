@@ -1,23 +1,17 @@
 open Prelude
 
-module type PARAMS = sig
-  include Url.QUERYSTRING
-  val endpoint_name : string
-  val make : ?collection:value ->
-             ?identifier:value ->
-             ?search:value ->
-             unit ->
-             value list Dict.t
-  val to_list : string list Dict.t ->
-                (string * string list) list
-end
+(* module type DEFAULTS = sig
+ *   val collection : string
+ *   val group : string
+ *   val identifier : string
+ *   val search : string
+ * end *)
 
-module type DEFAULTS = sig
-  val collection : string
-  val group : string
-  val identifier : string
-  val search : string
-end
+(* module type DEBUG = sig
+ *   type t = Curl | Raw | DebugOff
+ * end *)
+
+include Utils_intf
 
 module Fetcher (P : PARAMS) (D : DEFAULTS) = struct
   module Url = struct
@@ -55,13 +49,13 @@ module Fetcher (P : PARAMS) (D : DEFAULTS) = struct
   end
 
   module Fetch = struct
-    let fetch_body url =
-      let open Lwt.Infix in
-      let stringify (_, body) =
-        Cohttp_lwt.Body.to_string body
-      in
-      Cohttp_lwt_unix.Client.get (Uri.of_string url) >>= stringify
-      |> Lwt_main.run
+    (* let fetch_body url =
+     *   let open Lwt.Infix in
+     *   let stringify (_, body) =
+     *     Cohttp_lwt.Body.to_string body
+     *   in
+     *   Cohttp_lwt_unix.Client.get (Uri.of_string url) >>= stringify
+     *   |> Lwt_main.run *)
 
     let fetch_ocamlnet uri =
       match Uri.to_string uri |> Nethttp_client.Convenience.http_get_message with
@@ -88,7 +82,7 @@ module Spec = struct
     in map each_field fields
 end
 
-module Debug = struct
+module Debug : DEBUG = struct
   type t =
     | Curl
     | Raw

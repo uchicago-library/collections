@@ -1,21 +1,4 @@
-module type ENDPOINT = sig
-  val endpoint_name : string
-  (* val gimme :?debug:Utils.Debug.t ->
-   *            ?group:string ->
-   *            ?collection:string ->
-   *            ?identifier:'a ->
-   *            ?search:'b ->
-   *            unit ->
-   *            string *)
-  val subservice : Netcgi.cgi ->
-                   'a ->
-                   'b ->
-                   Nethttp.http_status
-  module Schema : sig
-    val input_write : unit -> unit
-    val output_write : unit -> unit
-  end
-end
+include Endpoint_intf
 
 let endpoint_to_spec (module E : ENDPOINT) =
   E.(endpoint_name, subservice)

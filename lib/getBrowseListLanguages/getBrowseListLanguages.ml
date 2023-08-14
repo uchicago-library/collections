@@ -3,8 +3,6 @@ module D = Defaults
 module R = Mattlude.Endofunctors.Result.Make (String)
 
 module Params = struct
-  include Url.Querystring
-
   let endpoint_name = "getBrowseListLanguages"
 
   let make
@@ -15,9 +13,9 @@ module Params = struct
     let _ = identifier in
     let _ = search in
     let qs = [ ("collection", [collection]) ]
-    in Dict.of_list Dict.empty qs
+    in Url.Querystring.(of_list empty qs)
 
-  let to_list = Dict.to_list 
+  let to_list = Url.Querystring.to_list 
 end
 
 let endpoint_name = Params.endpoint_name
