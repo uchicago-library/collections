@@ -1,12 +1,5 @@
 module type ENDPOINT = sig
   val endpoint_name : string
-  (* val gimme :?debug:Utils.Debug.t ->
-   *            ?group:string ->
-   *            ?collection:string ->
-   *            ?identifier:'a ->
-   *            ?search:'b ->
-   *            unit ->
-   *            string *)
   val subservice : Netcgi.cgi ->
                    'a ->
                    'b ->
