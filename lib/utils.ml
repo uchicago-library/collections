@@ -56,13 +56,6 @@ module Fetcher (P : PARAMS) (D : DEFAULTS) = struct
   end
 
   module Fetch = struct
-    let fetch_body url =
-      let open Lwt.Infix in
-      let stringify (_, body) =
-        Cohttp_lwt.Body.to_string body
-      in
-      Cohttp_lwt_unix.Client.get (Uri.of_string url) >>= stringify
-      |> Lwt_main.run
 
     let fetch_ocamlnet uri =
       match Uri.to_string uri |> Nethttp_client.Convenience.http_get_message with
