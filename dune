@@ -1,3 +1,7 @@
+(dirs :standard
+      "schema/input"
+      "schema/output")
+
 (executable
  (public_name collections)
  (name collections)
@@ -24,7 +28,7 @@
 
 ; (rule
 ;  (targets generate-schemas)
-;  (deps (source_tree "schema/input") (source_tree "schema/output"))
+;  (deps (universe))
 ;  (action (run generate-schemas)))
 
 (env
