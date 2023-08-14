@@ -2,10 +2,11 @@ open Prelude
 
 module type PARAMS = sig
   include Url.QUERYSTRING
+  type value = string
   val endpoint_name : string
-  val make : ?collection:value ->
-             ?identifier:value ->
-             ?search:value ->
+  val make : ?collection:string ->
+             ?identifier:string ->
+             ?search:string ->
              unit ->
              value list Dict.t
   val to_list : string list Dict.t ->

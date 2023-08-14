@@ -1,9 +1,10 @@
 module type PARAMS = sig
   include Url.QUERYSTRING
+  type value = string
   val endpoint_name : string
   val make :
-    ?collection:value ->
-    ?identifier:value -> ?search:value -> unit -> value list Dict.t
+    ?collection:string ->
+    ?identifier:string -> ?search:string -> unit -> string list Dict.t
   val to_list : string list Dict.t -> (string * string list) list
   end
 
