@@ -3,9 +3,9 @@ open Prelude
 module type QUERYSTRING = Url_intf.QUERYSTRING
 
 module Querystring : QUERYSTRING
-       with module Field = String
+       with module Field = Prelude.String
         and type value = string = struct
-  module Field = String
+  module Field = Prelude.String
   module Dict = Prelude.Map.Make (Field)
   type value = string
   type t = value list Dict.t
