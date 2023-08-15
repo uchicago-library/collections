@@ -22,6 +22,7 @@ end
 
 let endpoint_name = Params.endpoint_name
 
+
 include Utils.Fetcher (Params) (D)
 
 module Parse = struct
@@ -30,17 +31,16 @@ module Parse = struct
 
   module Encoding = struct
     let bindings_enc =
-      assoc @@ list @@
-        obj2
-          (req "prefLabel" @@
-             obj3
-               (req "xml:lang" string)
-               (req "type" string)
-               (req "value" string))
-          (req "code" @@
-             obj2
-               (req "type" string)
-               (req "value" string))
+      obj2
+        (req "prefLabel" @@
+           obj3
+             (req "xml:lang" string)
+             (req "type" string)
+             (req "value" string))
+        (req "code" @@
+           obj2
+             (req "type" string)
+             (req "value" string))
       
     let enc = bindings_to_enc bindings_enc
   end
@@ -59,6 +59,7 @@ module Transform = struct
 
   let transform (_, results) =
     let open R in
+    (* todo: refactor opt_to_res *)
     let opt_to_res = function
       | Some bindings -> Ok bindings
       | None -> Error "key error"
@@ -79,6 +80,7 @@ module Export = struct
     | Ok json -> `O [("ok", json)]
     | Error msg -> `O [("error", `String msg)]
 
+  (* todo: refactor this part *)
   let export json_result =
     let open R in
     json_result
@@ -153,10 +155,8 @@ module Schema = struct
       endpoint_name
 
   let input_write () =
-    (* let cwd = Prelude.Unix.getcwd () in *)
     writefile ~fn:input_path input_schema
 
   let output_write () =
-    (* let cwd = Prelude.Unix.getcwd () in *)
     writefile ~fn:output_path output_schema
 end

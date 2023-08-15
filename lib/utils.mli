@@ -48,7 +48,9 @@ end
 module Encoding : sig
   val bindings_to_enc :
     'a Data_encoding.Encoding.t ->
-    ((string * string list) list * 'a) Data_encoding.Encoding.t
+    ((string * string list) list
+     * (string * 'a list) list) Data_encoding.Encoding.t
+
   val trap : 'a Data_encoding.Encoding.t ->
              Data_encoding.Json.json ->
              ('a, string) result

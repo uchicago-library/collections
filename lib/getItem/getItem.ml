@@ -36,9 +36,9 @@ module Parse = struct
 
   module Encoding = struct
     let bindings_enc =
-      array @@ assoc @@ obj2
-                          (req "type" string)
-                          (req "value" string)
+      assoc (obj2
+               (req "type" string)
+               (req "value" string))
 
     let enc = bindings_to_enc bindings_enc
   end
@@ -48,24 +48,37 @@ module Parse = struct
 end
 
 module Transform = struct
-  let transform alist =
+  let fix_bindings bindings =
     let f (key, (_, value)) =
       key, String.split ~sep:"|" value
     in
-    map f alist
+    map f (List.concat bindings)
+
+  let transform (_, results) =
+    let open R in
+    (* todo: refactor opt_to_res *)
+    let opt_to_res = function
+      | Some bindings -> Ok bindings
+      | None -> Error "key error"
+    in
+    let* bindings =
+      opt_to_res (assoc_opt "bindings" results)
+    in
+    pure (fix_bindings bindings)
 end
 
 module Export = struct
   open Data_encoding
 
   module Encoding = struct
-    let enc = assoc (assoc string)
+    let enc = assoc (list string)
   end
 
   let un_result = function
     | Ok json -> `O [("ok", json)]
     | Error msg -> `O [("error", `String msg)]
 
+  (* TODO: refactor this part *)
   let export json_result =
     let open R in
     json_result
@@ -75,30 +88,29 @@ module Export = struct
   let schema = Utils.Schema.schema Encoding.enc
 end
 
-(* module Gimme = struct
- *   open Utils.Debug
- * 
- *   let gimme
- *         ?(debug=DebugOff)
- *         ?(group=D.group)
- *         ?(collection=D.collection)
- *         ?identifier
- *         ?search
- *         () =
- *     let open R in 
- *     let _ = identifier in
- *     let _ = search in
- *     match debug with
- *     | Curl ->
- *        Url.url ~group ~collection ()
- *     | Raw ->
- *        Fetch.fetch ~group ~collection ()
- *     | DebugOff ->
- *        Fetch.fetch ~group ~collection ()
- *        |> Utils.Ezjsonm.ezjsonm
- *        >>= Parse.parsed
- *        >>= Transform.transform
- *        |> Export.export
- *        |> Printing.Json.to_string
- * end
- * include Gimme *)
+module Gimme = struct
+  open Utils.Debug
+
+  let gimme
+        ?(debug=DebugOff)
+        ?(group=D.group)
+        ?(collection=D.collection)
+        ?(identifier=D.identifier)
+        ?search
+        () =
+    let open R in 
+    let _ = search in
+    match debug with
+    | Curl ->
+       Url.url ~group ~collection ~identifier ()
+    | Raw ->
+       Fetch.fetch ~group ~collection ~identifier ()
+    | DebugOff ->
+       Fetch.fetch ~group ~collection ~identifier ()
+       |> Utils.Ezjsonm.ezjsonm
+       >>= Parse.parse
+       >>= Transform.transform
+       |> Export.export
+       |> Printing.Json.to_string
+end
+include Gimme

@@ -100,7 +100,9 @@ module Encoding = struct
   let bindings_to_enc bindings_enc =
     let vars_enc = assoc @@ list string in
     let head_enc = req "head" vars_enc in
-    let results_enc = req "results" bindings_enc in
+    let results_enc =
+      req "results" (assoc @@ list @@ bindings_enc)
+    in
     obj2 head_enc results_enc
 
   let trap enc = Result.trap
