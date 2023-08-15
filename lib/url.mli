@@ -9,6 +9,5 @@ module BaseURL : sig
     val assemble_url_prefix : ?group:string -> string -> string
   end
   module Ark : sig
-    val assemble_url_prefix : string -> string -> string -> string
-  end
+    val ark_base : string -> string  end
 end

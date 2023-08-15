@@ -93,3 +93,33 @@ module Schema = struct
   let schemas_root = "schemas"
   let schema enc = Printing.Encoding.to_string enc
 end
+
+module Encoding = struct
+  open Data_encoding
+
+  let bindings_to_enc bindings_enc =
+    let vars_enc = assoc @@ list string in
+    let head_enc = req "head" vars_enc in
+    let results_enc = req "results" bindings_enc in
+    obj2 head_enc results_enc
+
+  let trap enc = Result.trap
+                   Printing.Error.to_string
+                   (Json.destruct enc)
+end
+
+module Ezjsonm = struct
+  let ezjsonm json =
+    match Ezjsonm.from_string json with
+    | exception Ezjsonm.Parse_error (`Null,_)
+                |  `O [("head",
+                        `O [("vars",
+                             `A [])]);
+                       ("results",
+                        `O [("bindings",
+                             `A [])])] ->
+       Error "empty result"
+    | exception e ->
+       Error (Printing.Error.to_string e)
+    | success -> Ok success
+end

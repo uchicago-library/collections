@@ -44,3 +44,16 @@ module Schema : sig
   val schemas_root : string
   val schema : 'a Data_encoding.Encoding.t -> string
 end
+
+module Encoding : sig
+  val bindings_to_enc :
+    'a Data_encoding.Encoding.t ->
+    ((string * string list) list * 'a) Data_encoding.Encoding.t
+  val trap : 'a Data_encoding.Encoding.t ->
+             Data_encoding.Json.json ->
+             ('a, string) result
+end
+
+module Ezjsonm : sig
+  val ezjsonm : string -> ([> Ezjsonm.t ], string) result
+end

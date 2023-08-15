@@ -26,11 +26,9 @@ include Utils.Fetcher (Params) (D)
 
 module Parse = struct
   open Data_encoding
+  open Utils.Encoding 
 
   module Encoding = struct
-
-    let vars_enc = assoc @@ list string
-
     let bindings_enc =
       assoc @@ list @@
         obj2
@@ -44,29 +42,10 @@ module Parse = struct
                (req "type" string)
                (req "value" string))
       
-    let head_enc = req "head" vars_enc
-    let results_enc = req "results" bindings_enc
-    let enc = obj2 head_enc results_enc
+    let enc = bindings_to_enc bindings_enc
   end
 
-  let ezjsonm json =
-    match Ezjsonm.from_string json with
-    | exception Ezjsonm.Parse_error (`Null,_)
-                |  `O [("head",
-                        `O [("vars",
-                             `A [])]);
-                       ("results",
-                        `O [("bindings",
-                             `A [])])] ->
-       Error "empty result"
-    | exception e ->
-       Error (Printing.Error.to_string e)
-    | success -> Ok success
-
-  let parse = Result.trap
-                Printing.Error.to_string
-                (Json.destruct Encoding.enc)
-
+  let parse = trap Encoding.enc
   let schema = Utils.Schema.schema Encoding.enc
 end
 
@@ -106,9 +85,6 @@ module Export = struct
     >>| Json.construct Encoding.enc
     |> un_result
 
-  module Example = struct
-    
-  end
   let schema = Utils.Schema.schema Encoding.enc
 end
 
@@ -132,7 +108,7 @@ module Gimme = struct
        Fetch.fetch ~group ~collection ()
     | DebugOff ->
        Fetch.fetch ~group ~collection ()
-       |> Parse.ezjsonm
+       |> Utils.Ezjsonm.ezjsonm
        >>= Parse.parse
        >>= Transform.transform
        |> Export.export
@@ -165,7 +141,6 @@ module Schema = struct
   let input_path =
     sprintf
       "%s/%s/%s.json"
-      (* cwd *)
       schemas_root
       "input"
       endpoint_name
@@ -173,7 +148,6 @@ module Schema = struct
   let output_path =
     sprintf
       "%s/%s/%s.json"
-      (* cwd *)
       schemas_root
       "output"
       endpoint_name
