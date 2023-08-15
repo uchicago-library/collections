@@ -3,6 +3,10 @@ module Json : sig
   val print : ?truncate:int -> Data_encoding.Json.json -> unit
 end
 
+module Json_string : sig
+  val print : ?truncate:int -> string -> unit
+end
+
 module Encoding : sig
   val to_string : 'a Data_encoding.Encoding.t -> string
   val print : ?truncate:int -> 'a Data_encoding.Encoding.t -> unit

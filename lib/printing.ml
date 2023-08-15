@@ -19,6 +19,19 @@ module Json = struct
     | None -> print_entire json
 end
 
+module Json_string = struct
+  let print_entire str =
+    match Ezjsonm.from_string str with
+    | exception _ -> Printf.printf "invalid json"
+    | json -> Json.print_entire json
+
+  let print ?truncate str =
+    match truncate with
+    | Some n -> Prelude.print
+                @@ Prelude.String.take n str
+    | None -> print_entire str
+end
+
 module Encoding = struct
   let enc_to_schema enc =
     enc
