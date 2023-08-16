@@ -19,8 +19,8 @@ module Params = struct
         ?search
         () =
     let _ = search in
-    let qs = [ ("collection", [collection]);
-               ("identifier", [ark_base identifier]); ]
+    let qs = [ ("collection", [collection]) ;
+               ("identifier", [ark_base identifier]) ; ]
     in Dict.of_list Dict.empty qs
 
   let to_list = Dict.to_list 

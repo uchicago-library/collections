@@ -8,3 +8,5 @@ module Endpoint = Endpoint
 (* Mark Logic API modules *)
 module GetBrowseListLanguages = GetBrowseListLanguages
 module GetItem = GetItem
+module GetResultsByKeyword = GetResultsByKeyword
+module GetBrowseListLocations = GetBrowseListLocations

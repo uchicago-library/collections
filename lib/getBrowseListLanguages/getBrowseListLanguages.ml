@@ -22,7 +22,6 @@ end
 
 let endpoint_name = Params.endpoint_name
 
-
 include Utils.Fetcher (Params) (D)
 
 module Parse = struct
