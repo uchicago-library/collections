@@ -3,7 +3,7 @@ module R = Mattlude.Endofunctors.Result.Make (String)
 
 module D = struct
   include Defaults
-  include Item
+  (* include Item *)
 end
 
 module Params = struct
