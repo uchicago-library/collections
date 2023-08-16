@@ -4,7 +4,11 @@ module type INTERFACE = sig
   val gimme :
     ?debug:Utils.Debug.t ->
     ?group:string ->
-    ?collection:string -> ?identifier:'a -> ?search:'b -> unit -> string
+    ?collection:string ->
+    ?identifier:string ->
+    ?search:'b ->
+    unit ->
+    string
 
   val subservice : Netcgi.cgi -> 'a -> 'b -> Nethttp.http_status
 

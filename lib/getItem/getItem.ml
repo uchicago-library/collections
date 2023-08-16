@@ -114,3 +114,47 @@ module Gimme = struct
        |> Printing.Json.to_string
 end
 include Gimme
+
+module Spec = struct
+  let qs_fields = [ "group"; "collection"; "identifier" ]
+  let spec = Utils.Spec.mk_spec qs_fields
+end
+
+module Subservice = struct
+  let subservice cgi _ _ =
+    let open Restful in
+    let open Param in
+    let ps = process cgi Spec.spec in
+    let group = (value ps "group") in
+    let collection = (value ps "collection") in
+    let identifier = (value ps "identifier") in
+    Content.write ~content_type:"text/plain" cgi
+                  (gimme ~group ~collection ~identifier ())
+end
+include Subservice
+
+module Schema = struct
+  open Utils.Schema
+  let input_schema = Parse.schema
+  let output_schema = Export.schema
+
+  let input_path =
+    sprintf
+      "%s/%s/%s.json"
+      schemas_root
+      "input"
+      endpoint_name
+
+  let output_path =
+    sprintf
+      "%s/%s/%s.json"
+      schemas_root
+      "output"
+      endpoint_name
+
+  let input_write () =
+    writefile ~fn:input_path input_schema
+
+  let output_write () =
+    writefile ~fn:output_path output_schema
+end
