@@ -91,7 +91,6 @@ end
 
 module Gimme = struct
   open Utils.Debug
-
   let gimme
         ?(debug=DebugOff)
         ?(group=D.group)
@@ -107,9 +106,12 @@ module Gimme = struct
        Url.url ~group ~collection ()
     | Raw ->
        Fetch.fetch ~group ~collection ()
+       >>= Utils.Ezjsonm.ezjsonm
+       |> Export.un_result
+       |> Printing.Json.to_string
     | DebugOff ->
        Fetch.fetch ~group ~collection ()
-       |> Utils.Ezjsonm.ezjsonm
+       >>= Utils.Ezjsonm.ezjsonm
        >>= Parse.parse
        >>= Transform.transform
        |> Export.export

@@ -58,17 +58,17 @@ module Fetcher (P : PARAMS) (D : DEFAULTS) = struct
   module Fetch = struct
 
     (* TODO: make this return a result again once stuff is working *)
-    let fetch_ocamlnet uri =
-      match Uri.to_string uri |> Nethttp_client.Convenience.http_get_message with
-      (* | exception Nethttp_client.Http_error (code, str) -> Error (`Http (code, (), str)) *)
-      | call -> call # response_body # value
+    (* let fetch_ocamlnet uri =
+     *   match Uri.to_string uri |> Nethttp_client.Convenience.http_get_message with
+     *   (\* | exception Nethttp_client.Http_error (code, str) -> Error (`Http (code, (), str)) *\)
+     *   | call -> call # response_body # value *)
 
     (* TODO: or this if we end up using it *)
     let fetch_ocamlnet uri =
       let (>>|) = Result.(>>|) in
       Httpr_ocamlnet.get uri
       >>| Httpr_ocamlnet.Response.body
-      |> (fun (Ok o) -> o)
+      (* |> (fun (Ok o) -> o) *)
 
     (* TODO: also make this return a result; thank you  *)
     let fetch
