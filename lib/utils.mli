@@ -59,3 +59,10 @@ end
 module Ezjsonm : sig
   val ezjsonm : string -> ([> Ezjsonm.t ], string) result
 end
+
+module Transform : sig
+  val assoc_res : 'a ->
+                  'b ->
+                  ('b * 'c) list ->
+                  ('c, 'a) result
+end
