@@ -9,4 +9,6 @@ let print_schemas (module E : ENDPOINT) =
   Prelude.print ("Printing output schema for " ^ E.endpoint_name) ;
   E.Schema.output_write ()
 
-let endpoints = [ (module GetBrowseListLanguages : ENDPOINT) ]
+let endpoints = [ (module GetBrowseListLanguages : ENDPOINT) ;
+                  (module GetItem : ENDPOINT) ;
+                  (module GetResultsByKeyword) ; ]
