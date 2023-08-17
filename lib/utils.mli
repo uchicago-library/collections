@@ -21,13 +21,19 @@ functor (_ : PARAMS) (_ : DEFAULTS) -> sig
     val url :
       ?group:string ->
       ?collection:string ->
-      ?identifier:string -> ?search:string -> unit -> string
+      ?identifier:string ->
+      ?search:string ->
+      unit ->
+      string
   end
   module Fetch : sig
     val fetch :
       ?group:string ->
       ?collection:string ->
-      ?identifier:string -> ?search:string -> unit -> string
+      ?identifier:string ->
+      ?search:string ->
+      unit ->
+      (string, string) result
   end
 end
 
