@@ -4,6 +4,7 @@
 DISPLAY = short
 DUNE = opam exec -- dune $1 --display $(DISPLAY)
 INSTALLHOST = motacilla.lib.uchicago.edu
+bindir = /usr/local/www/apache24/cgi-bin/collections
 
 build all::
 	$(call DUNE, build @@default)

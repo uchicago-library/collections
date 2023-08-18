@@ -5,10 +5,6 @@
  (libraries prelude
             mattlude
             restful
-            cohttp
-            cohttp-lwt
-            cohttp-lwt-unix
-            tls-lwt
             data-encoding
             ezjsonm
             nettls-gnutls

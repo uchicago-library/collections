@@ -1,7 +1,6 @@
 # Makefile.deploy					 -*- makefile-gmake -*-
 
 FREEBSDHOST = ocaml.lib.uchicago.edu
-INSTALLHOST = localhost
 PROJECT_NAME = collections
 
 freebsd: clean			## build on FreeBSD
@@ -14,15 +13,15 @@ freebsd-install: freebsd			## install on FreeBSD
 
 install-versioned: freebsd		## install a "versioned" executable in $(bindir)
 	@date +%Y-%m-%dT%H:%M:%S > .timestamp
-	scp $(NAME) $(INSTALLHOST):$(bindir)/$(NAME).`cat .timestamp`
+	ls -l; scp $(PROJECT_NAME).exe $(INSTALLHOST):$(bindir)/$(PROJECT_NAME).`cat .timestamp`
 	@: double-quotes essential
-	ssh $(INSTALLHOST) "cd $(bindir) && test -f $(NAME).`cat .timestamp` && ln -nfs $(NAME).`cat .timestamp` $(bindir)/$(NAME)"
-	ssh $(INSTALLHOST) 'ls -l $(bindir)/$(NAME)'
+	ssh $(INSTALLHOST) "cd $(bindir) && test -f $(PROJECT_NAME).`cat .timestamp` && ln -nfs $(PROJECT_NAME).`cat .timestamp` $(bindir)/$(PROJECT_NAME)"
+	ssh $(INSTALLHOST) 'ls -l $(bindir)/$(PROJECT_NAME)'
 	@rm -f .timestamp
 .PHONY: install-versioned
 
 revert::
 	@: single-quotes essential
-	ssh $(INSTALLHOST) 'cd $(bindir) && ls -d $(NAME).[0-9]* > /dev/null 2>&1 && ln -nfs `ls $(NAME).[0-9]* | tail -2 | head -1` $(NAME)'
-	ssh $(INSTALLHOST) 'ls -l $(bindir)/$(NAME)'
+	ssh $(INSTALLHOST) 'cd $(bindir) && ls -d $(PROJECT_NAME).[0-9]* > /dev/null 2>&1 && ln -nfs `ls $(PROJECT_NAME).[0-9]* | tail -2 | head -1` $(PROJECT_NAME)'
+	ssh $(INSTALLHOST) 'ls -l $(bindir)/$(PROJECT_NAME)'
 .PHONY: revert

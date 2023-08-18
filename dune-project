@@ -16,10 +16,9 @@
    mattlude
    utop
    ocp-index
-   restful
-   netclient
-   threads
-   nettls-gnutls
+   conf-gnutls
    data-encoding
    uri
+   ezjsonm
+   ocamlnet
    merlin))
