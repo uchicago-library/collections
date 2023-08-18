@@ -3,6 +3,7 @@
 
 DISPLAY = short
 DUNE = opam exec -- dune $1 --display $(DISPLAY)
+INSTALLHOST = motacilla.lib.uchicago.edu
 
 build all::
 	$(call DUNE, build @@default)
@@ -17,7 +18,8 @@ doc::
 .PHONY: doc
 
 clean::
-	$(call DUNE, clean)
+	-$(call DUNE, clean)
+	$(RM) -r _build
 .PHONY: clean
 
 sandbox::
@@ -28,3 +30,5 @@ deps::
 	opam repository add dldc https://dldc.lib.uchicago.edu/opam
 	opam install . --deps-only --yes
 PHONY: deps
+
+include makefiles/Makefile.deploy

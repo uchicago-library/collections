@@ -1,0 +1,28 @@
+# Makefile.deploy					 -*- makefile-gmake -*-
+
+FREEBSDHOST = ocaml.lib.uchicago.edu
+INSTALLHOST = localhost
+PROJECT_NAME = collections
+
+freebsd: clean			## build on FreeBSD
+	ssh $(FREEBSDHOST) 'export OPAMROOT=/usr/app/lib/opam ; opam switch set collections-switch ; eval $$(opam env) ; gmake -C /home/teichman/GitHub/$(PROJECT_NAME)'
+.PHONY: freebsd
+
+freebsd-install: freebsd			## install on FreeBSD
+	ssh $(FREEBSDHOST) gmake -C `pwd | sed "s;$$HOME;~;"` FORMAT=native install
+.PHONY: freebsd-install
+
+install-versioned: freebsd		## install a "versioned" executable in $(bindir)
+	@date +%Y-%m-%dT%H:%M:%S > .timestamp
+	scp $(NAME) $(INSTALLHOST):$(bindir)/$(NAME).`cat .timestamp`
+	@: double-quotes essential
+	ssh $(INSTALLHOST) "cd $(bindir) && test -f $(NAME).`cat .timestamp` && ln -nfs $(NAME).`cat .timestamp` $(bindir)/$(NAME)"
+	ssh $(INSTALLHOST) 'ls -l $(bindir)/$(NAME)'
+	@rm -f .timestamp
+.PHONY: install-versioned
+
+revert::
+	@: single-quotes essential
+	ssh $(INSTALLHOST) 'cd $(bindir) && ls -d $(NAME).[0-9]* > /dev/null 2>&1 && ln -nfs `ls $(NAME).[0-9]* | tail -2 | head -1` $(NAME)'
+	ssh $(INSTALLHOST) 'ls -l $(bindir)/$(NAME)'
+.PHONY: revert
