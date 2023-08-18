@@ -6,7 +6,7 @@ module type INTERFACE = sig
     ?group:string ->
     ?collection:string ->
     ?identifier:string ->
-    ?search:'b ->
+    ?search:string ->
     unit ->
     string
 

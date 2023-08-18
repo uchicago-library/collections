@@ -54,6 +54,9 @@ module Transform = struct
       "error preprocessing Mark Logic response"
       alist
 
+  (* TODO: fix_none will convert all empty language fields to English;
+     we should confirm with the metadata people that that is
+     correct. *)
   let fix_none ((opt,l1,value), keypair) =
     match opt with
     | None -> (("en",l1,value), keypair)

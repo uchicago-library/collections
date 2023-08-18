@@ -1,10 +1,6 @@
 open Prelude
+module D = Defaults
 module R = Mattlude.Endofunctors.Result.Make (String)
-
-module D = struct
-  include Defaults
-  (* include Item *)
-end
 
 module Params = struct
   include Url.Querystring
