@@ -11,5 +11,6 @@ let print_schemas (module E : ENDPOINT) =
 
 let endpoints = [ (module GetBrowseListLanguages : ENDPOINT) ;
                   (module GetItem : ENDPOINT) ;
-                  (* (module GetResultsByKeyword) ; *)
+                  (module GetResultsByKeyword : ENDPOINT) ;
+                  (module GetBrowseListLocations : ENDPOINT) ;
                 ]

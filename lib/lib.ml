@@ -10,3 +10,5 @@ module GetBrowseListLanguages = GetBrowseListLanguages
 module GetItem = GetItem
 module GetResultsByKeyword = GetResultsByKeyword
 module GetBrowseListLocations = GetBrowseListLocations
+(* module GetBrowseListDates = GetBrowseListDates *)
+module GetBrowseListContributors = GetBrowseListContributors
