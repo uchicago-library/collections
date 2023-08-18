@@ -52,7 +52,7 @@ module Fetcher (P : PARAMS) (D : DEFAULTS) = struct
         ~identifier
         ~search
         P.endpoint_name
-        (P.make ~collection ())
+        (P.make ~collection ~identifier ~search ())
   end
 
   module Fetch = struct
