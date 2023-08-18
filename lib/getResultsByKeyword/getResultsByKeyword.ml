@@ -123,9 +123,9 @@ module Subservice = struct
     let ps = process cgi Spec.spec in
     let group = (value ps "group") in
     let collection = (value ps "collection") in
-    let identifier = (value ps "search") in
+    let search = (value ps "search") in
     Content.write ~content_type:"text/plain" cgi
-                  (gimme ~group ~collection ~identifier ())
+                  (gimme ~group ~collection ~search ())
 end
 include Subservice
 
