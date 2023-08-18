@@ -9,7 +9,7 @@ module Service = struct
     map endpoint_to_spec endpoints
 
   let main _ _ cgi =
-    Pathinfo.dispatch "" endpoints cgi
+    Pathinfo.dispatch "collections" endpoints cgi
 end
 
 module R = Make (Service) (Error (Log.Default))
