@@ -15,4 +15,5 @@ let endpoints = [ (module GetBrowseListLanguages : ENDPOINT) ;
                   (module GetBrowseListLocations : ENDPOINT) ;
                   (module GetBrowseListContributors : ENDPOINT) ;
                   (module GetBrowseListDates : ENDPOINT) ;
+                  (module GetSeries : ENDPOINT) ;
                 ]

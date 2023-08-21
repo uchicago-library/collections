@@ -12,3 +12,4 @@ module GetResultsByKeyword = GetResultsByKeyword
 module GetBrowseListLocations = GetBrowseListLocations
 module GetBrowseListDates = GetBrowseListDates
 module GetBrowseListContributors = GetBrowseListContributors
+module GetSeries = GetSeries
