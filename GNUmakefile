@@ -6,8 +6,16 @@ DUNE = opam exec -- dune $1 --display $(DISPLAY)
 INSTALLHOST = motacilla.lib.uchicago.edu
 bindir = /usr/local/www/apache24/cgi-bin/digital-collections
 
-build all::
+all: generate_schemas
+.PHONY: all
+
+generate_schemas: build 
+	./generate_schemas.exe
+.PHONY: generate_schemas
+
+build::
 	$(call DUNE, build @@default)
+
 .PHONY: build all
 
 install: build
