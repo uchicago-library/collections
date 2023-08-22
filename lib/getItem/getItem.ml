@@ -44,6 +44,7 @@ module Parse = struct
 end
 
 module Transform = struct
+
   let fix_bindings bindings =
     let f (key, (_, value)) =
       key, String.split ~sep:"|" value

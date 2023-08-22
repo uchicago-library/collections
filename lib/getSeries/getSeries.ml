@@ -58,6 +58,22 @@ module Transform = struct
        Error "empty result"
     | other -> Ok other
 
+  (* TODO: for fixing languages *)
+  let kleisli str =
+    match String.split ~sep:":" str with
+    | ["Both"; b] -> ["Primary", b; "Subject", b]
+    | [role;lang] -> [role, lang] | _ -> assert false
+
+  (* TODO: do this adjustment on the ("languages", ...) alist pair
+     only *)
+  let fix_langs (_, alist) =
+    let open List.Ops in
+    let new_alist =
+      alist
+      >>= kleisli
+      |> List.Assoc.coalesce
+    in "languages", new_alist
+
   let transform (_, results) =
     let open R in
     (* todo: refactor opt_to_res *)
