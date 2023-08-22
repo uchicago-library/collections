@@ -13,5 +13,4 @@ module Service = struct
 end
 
 module R = Make (Service) (Error (Log.Default))
-
 let () = R.main ()
