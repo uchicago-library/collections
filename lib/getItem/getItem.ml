@@ -50,6 +50,18 @@ module Transform = struct
     in
     map f (List.concat bindings)
 
+  let catch_empty = function
+    |  [("contributors", []);
+        ("creators", []);
+        ("dates", []);
+        ("languages", []);
+        ("titles", []);
+        ("alternatives", []);
+        ("locations", []);
+        ("dmaTitles", [])] ->
+       Error "empty result"
+    | other -> Ok other
+
   let transform (_, results) =
     let open R in
     (* todo: refactor opt_to_res *)
@@ -60,7 +72,7 @@ module Transform = struct
     let* bindings =
       opt_to_res (assoc_opt "bindings" results)
     in
-    pure (fix_bindings bindings)
+    catch_empty (fix_bindings bindings)
 end
 
 module Export = struct

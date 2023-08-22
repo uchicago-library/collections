@@ -94,6 +94,20 @@ end
 
 module Gimme = struct
   open Utils.Debug
+
+  let gimme_ocaml 
+        ?(group=D.group)
+        ?(collection=D.collection)
+        ?(identifier=D.identifier)
+        ?search
+        () =
+    let open R in 
+    let _ = search in
+    Fetch.fetch ~group ~collection ~identifier ()
+       >>= Utils.Ezjsonm.ezjsonm
+       >>= Parse.parse
+       >>= Transform.transform
+
   let gimme
         ?(debug=DebugOff)
         ?(group=D.group)
@@ -112,10 +126,7 @@ module Gimme = struct
        |> Export.un_result
        |> Printing.Json.to_string
     | DebugOff ->
-       Fetch.fetch ~group ~collection ~identifier ()
-       >>= Utils.Ezjsonm.ezjsonm
-       >>= Parse.parse
-       >>= Transform.transform
+       gimme_ocaml ~group ~collection ~identifier ()
        |> Export.export
        |> Printing.Json.to_string
 end
