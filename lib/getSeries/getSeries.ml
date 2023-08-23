@@ -74,13 +74,14 @@ module Transform = struct
   (* TODO: do this adjustment on the ("languages", ...) alist pair
      only *)
   let generate_langs langlist =
+    let nub_pair (a,b) =
+      (a, nub b)
+    in
     let open List.Ops in
-    let new_langlist =
-      langlist
-      >>= kleisli
-      |> List.Assoc.coalesce
-      |> nub
-    in new_langlist
+    langlist
+    >>= kleisli
+    |> List.Assoc.coalesce
+    |> map nub_pair
 
   let fix_langs alist =
     let open R in
