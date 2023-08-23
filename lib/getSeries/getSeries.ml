@@ -47,6 +47,11 @@ module Parse = struct
 end
 
 module Transform = struct
+  let assoc_res alist =
+    Utils.Transform.assoc_res
+      "error preprocessing Mark Logic response"
+      alist
+
   let fix_bindings bindings =
     let f (key, (_, value)) =
       key, String.split ~sep:"|" value
@@ -58,21 +63,34 @@ module Transform = struct
        Error "empty result"
     | other -> Ok other
 
-  (* TODO: for fixing languages *)
   let kleisli str =
     match String.split ~sep:":" str with
-    | ["Both"; b] -> ["Primary", b; "Subject", b]
-    | [role;lang] -> [role, lang] | _ -> assert false
+    | ["Both"; b] -> ["primaryLanguage", b; "subjectLanguage", b]
+    | ["Primary"; p] -> ["primaryLanguage", p]
+    | ["Subject"; s] -> ["subjectLanguage", s]
+    | [role;lang] -> [role, lang]
+    | _ -> []
 
   (* TODO: do this adjustment on the ("languages", ...) alist pair
      only *)
-  let fix_langs (_, alist) =
+  let generate_langs langlist =
     let open List.Ops in
-    let new_alist =
-      alist
+    let new_langlist =
+      langlist
       >>= kleisli
       |> List.Assoc.coalesce
-    in "languages", new_alist
+      |> nub
+    in new_langlist
+
+  let fix_langs alist =
+    let open R in
+    let* langlist =
+      assoc_res "languages" alist
+    in
+    let new_langs =
+      generate_langs langlist
+    in
+    pure (alist @ new_langs)
 
   let transform (_, results) =
     let open R in
@@ -85,6 +103,7 @@ module Transform = struct
       opt_to_res (assoc_opt "bindings" results)
     in
     catch_empty (fix_bindings bindings)
+    >>= fix_langs
 end
 
 module Export = struct
