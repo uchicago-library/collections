@@ -21,4 +21,5 @@
    uri
    ezjsonm
    ocamlnet
-   merlin))
+   merlin
+   rdf))

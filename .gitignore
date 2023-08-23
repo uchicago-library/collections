@@ -35,3 +35,5 @@ collections.exe
 *.opam
 **/*.exe
 **/*#*
+
+*.ttl
