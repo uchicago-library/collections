@@ -15,6 +15,10 @@ module type DEFAULTS = sig
   val search : string
 end
 
+val fetch : ?headers:string list ->
+            Uri.t ->
+            (string, string) result
+
 module Fetcher :
 functor (_ : PARAMS) (_ : DEFAULTS) -> sig
   module Url : sig

@@ -20,6 +20,12 @@ module type DEFAULTS = sig
   val search : string
 end
 
+(* TODO: fully httpr-ify this *)
+let fetch ?headers uri =
+  let (>>|) = Result.(>>|) in
+  Httpr_ocamlnet.get ?headers uri
+  >>| Httpr_ocamlnet.Response.body
+
 module Fetcher (P : PARAMS) (D : DEFAULTS) = struct
   module Url = struct
     let make_api_string
@@ -48,6 +54,7 @@ module Fetcher (P : PARAMS) (D : DEFAULTS) = struct
           ?(search=D.search)
           () =
       make_api_string
+
         ~group
         ~identifier
         ~search
@@ -63,23 +70,17 @@ module Fetcher (P : PARAMS) (D : DEFAULTS) = struct
      *   (\* | exception Nethttp_client.Http_error (code, str) -> Error (`Http (code, (), str)) *\)
      *   | call -> call # response_body # value *)
 
-    (* TODO: or this if we end up using it *)
-    let fetch_ocamlnet uri =
-      let (>>|) = Result.(>>|) in
-      Httpr_ocamlnet.get uri
-      >>| Httpr_ocamlnet.Response.body
-      (* |> (fun (Ok o) -> o) *)
-
-    (* TODO: also make this return a result; thank you  *)
     let fetch
           ?(group=D.group)
           ?(collection=D.collection)
           ?(identifier=D.identifier)
           ?(search=D.search)
           () 
-      = let url =
+      = let fetch_ocamlnet = fetch in
+        let url =
           Url.url ~group ~collection ~identifier ~search ()
-        in fetch_ocamlnet (Uri.of_string url)
+        in
+        fetch_ocamlnet (Uri.of_string url)
   end
 end
 

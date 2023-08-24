@@ -20,6 +20,8 @@ depends: [
   "ezjsonm"
   "ocamlnet"
   "merlin"
+  "rdf"
+  "base64"
   "odoc" {with-doc}
 ]
 build: [

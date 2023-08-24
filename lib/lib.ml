@@ -4,6 +4,7 @@ module Printing = Printing
 module Defaults = Defaults
 module Url = Url
 module Endpoint = Endpoint
+module Sparql = Sparql
 
 (* Mark Logic API modules *)
 module GetBrowseListLanguages = GetBrowseListLanguages

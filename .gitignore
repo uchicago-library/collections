@@ -37,3 +37,6 @@ collections.exe
 **/*#*
 
 *.ttl
+
+user.txt
+password.txt

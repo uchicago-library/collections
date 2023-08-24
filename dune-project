@@ -22,4 +22,5 @@
    ezjsonm
    ocamlnet
    merlin
-   rdf))
+   rdf
+   base64))

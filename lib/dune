@@ -9,7 +9,8 @@
             ezjsonm
             nettls-gnutls
             netclient
-            rdf))
+            rdf
+            base64))
 
 (env
   (dev
