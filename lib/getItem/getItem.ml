@@ -43,6 +43,10 @@ module Parse = struct
   let schema = Utils.Schema.schema Encoding.enc
 end
 
+module Supplements = struct
+  let x = GetParent.endpoint_name
+end
+
 module Transform = struct
 
   let fix_bindings bindings =
@@ -51,17 +55,23 @@ module Transform = struct
     in
     map f (List.concat bindings)
 
+  let add_restrictions restrz alist =
+    alist @ ["accessRights", [restrz]]
+
   let catch_empty = function
-    |  [("contributors", []);
-        ("creators", []);
-        ("dates", []);
-        ("languages", []);
-        ("titles", []);
-        ("alternatives", []);
-        ("locations", []);
-        ("dmaTitles", [])] ->
+    |  ("contributors", [])
+       :: ("creators", [])
+       :: ("dates", [])
+       :: ("languages", [])
+       :: ("titles", [])
+       :: ("alternatives", [])
+       :: ("locations", [])
+       :: ("dmaTitles", [])
+       :: _ ->
        Error "empty result"
     | other -> Ok other
+
+  let restrictions = "Restricted"
 
   let transform (_, results) =
     let open R in
@@ -73,7 +83,9 @@ module Transform = struct
     let* bindings =
       opt_to_res (assoc_opt "bindings" results)
     in
-    catch_empty (fix_bindings bindings)
+    catch_empty
+    @@ add_restrictions restrictions
+    @@ fix_bindings bindings
 end
 
 module Export = struct
@@ -99,6 +111,7 @@ end
 
 module Gimme = struct
   open Utils.Debug
+
   let gimme
         ?(debug=DebugOff)
         ?(group=D.group)
